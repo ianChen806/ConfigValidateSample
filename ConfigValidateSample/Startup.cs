@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ConfigValidateSample
 {
@@ -32,7 +33,7 @@ namespace ConfigValidateSample
             services.AddOptions<MyConfig>().Configure(config =>
             {
                 Configuration.Bind(config);
-            }).ValidateDataAnnotations();
+            }).Services.AddTransient<IValidateOptions<MyConfig>, MyConfigValidate>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,9 +57,20 @@ namespace ConfigValidateSample
         }
     }
 
+    public class MyConfigValidate : IValidateOptions<MyConfig>
+    {
+        public ValidateOptionsResult Validate(string name, MyConfig options)
+        {
+            if (options.Id == 0)
+            {
+                return ValidateOptionsResult.Fail("id can not be 0");
+            }
+            return ValidateOptionsResult.Success;
+        }
+    }
+
     public class MyConfig
     {
-        [Range(1, int.MaxValue)]
         public int Id { get; set; }
 
         public string Name { get; set; }
