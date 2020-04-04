@@ -26,6 +26,8 @@ namespace ConfigValidateSample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.Configure<MyConfig>(Configuration.GetSection("MySetting"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,5 +49,14 @@ namespace ConfigValidateSample
                 endpoints.MapControllers();
             });
         }
+    }
+
+    public class MyConfig
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public List<string> Data { get; set; }
     }
 }
