@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,7 @@ namespace ConfigValidateSample
             services.AddOptions<MyConfig>().Configure(config =>
             {
                 Configuration.Bind(config);
-            }).Validate(config => config.Id!=0,"Id 不能等於0");
+            }).ValidateDataAnnotations();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +58,7 @@ namespace ConfigValidateSample
 
     public class MyConfig
     {
+        [Range(1, int.MaxValue)]
         public int Id { get; set; }
 
         public string Name { get; set; }
