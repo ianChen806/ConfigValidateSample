@@ -27,7 +27,11 @@ namespace ConfigValidateSample
         {
             services.AddControllers();
 
-            services.Configure<MyConfig>(Configuration.GetSection("MySetting"));
+            // services.Configure<MyConfig>(Configuration.GetSection("MySetting"));
+            services.AddOptions<MyConfig>().Configure(config =>
+            {
+                Configuration.Bind(config);
+            }).Validate(config => config.Id!=0,"Id 不能等於0");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

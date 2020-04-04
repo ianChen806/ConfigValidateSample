@@ -26,6 +26,7 @@ namespace ConfigValidateSample.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            var valueId = _config.Value.Id;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
                              {
